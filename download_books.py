@@ -69,8 +69,8 @@ def download_image(url, folder='images'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('start_id', help='Start ID for book', type=int, default=1)
-    parser.add_argument('end_id', help='End ID for book', type=int, default=10)
+    parser.add_argument('--start_id', help='Start ID for book', type=int, default=1)
+    parser.add_argument('--end_id', help='End ID for book', type=int, default=10)
     args = parser.parse_args()
     for i in range(args.start_id, args.end_id + 1):
         response = requests.get(f'https://tululu.org/b{i}/')
@@ -80,3 +80,5 @@ if __name__ == '__main__':
         except requests.exceptions.HTTPError:
             continue        
         book = parse_book_page(response.text)
+        download_txt(f'https://tululu.org/b{i}/', f"{i}. {book['title']}", 'books')
+        download_image(book['image_url'], 'images')
