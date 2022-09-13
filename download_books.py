@@ -22,10 +22,16 @@ def parse_book_data(url):
     soup = BeautifulSoup(response.text, 'lxml')
     title, author = soup.find('div', {'id':'content'}).find('h1').text.split('::')
     image_url = soup.find('div', {'id':'content'}).find('img')['src']
+    comment_blocks = soup.find('div', {'id':'content'}).find_all(class_='texts')
+    comments = []
+    for comment_block in comment_blocks:
+        comment = comment_block.find('span').text
+        comments.append(comment)
     return {
         'title': title.strip(),
         'author': author.strip(),
         'image_url': urljoin('https://tululu.org', image_url),
+        'comments' : comments,
         }
 
 
@@ -64,8 +70,9 @@ def download_image(url, folder='images'):
 if __name__ == '__main__':
     for i in range(1, 11):
         book = parse_book_data(f'https://tululu.org/b{i}/')
-        print(book)
         if book == None:
             continue
-        download_txt(f'https://tululu.org/txt.php?id={i}', f"{i}. {book['title']}", 'books')
-        download_image(book['image_url'])
+        print(book['comments'])
+        #
+        #download_txt(f'https://tululu.org/txt.php?id={i}', f"{i}. {book['title']}", 'books')
+        #download_image(book['image_url'])
