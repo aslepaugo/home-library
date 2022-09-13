@@ -27,11 +27,17 @@ def parse_book_data(url):
     for comment_block in comment_blocks:
         comment = comment_block.find('span').text
         comments.append(comment)
+    genres = []
+    genre_block = soup.find('span', class_='d_book').find_all('a')
+    for genre in genre_block:
+        genres.append(genre.text)
+
     return {
         'title': title.strip(),
         'author': author.strip(),
         'image_url': urljoin('https://tululu.org', image_url),
-        'comments' : comments,
+        'comments': comments,
+        'genres': genres,
         }
 
 
@@ -72,7 +78,7 @@ if __name__ == '__main__':
         book = parse_book_data(f'https://tululu.org/b{i}/')
         if book == None:
             continue
-        print(book['comments'])
+        print(book['genres'])
         #
         #download_txt(f'https://tululu.org/txt.php?id={i}', f"{i}. {book['title']}", 'books')
         #download_image(book['image_url'])
