@@ -1,4 +1,4 @@
-import os
+import argparse
 import requests
 
 from bs4 import BeautifulSoup
@@ -68,7 +68,11 @@ def download_image(url, folder='images'):
 
 
 if __name__ == '__main__':
-    for i in range(1, 11):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('start_id', help='Start ID for book', type=int, default=1)
+    parser.add_argument('end_id', help='End ID for book', type=int, default=10)
+    args = parser.parse_args()
+    for i in range(args.start_id, args.end_id + 1):
         response = requests.get(f'https://tululu.org/b{i}/')
         response.raise_for_status()
         try:
