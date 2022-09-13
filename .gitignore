@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 books/
+images/
 .flake8
