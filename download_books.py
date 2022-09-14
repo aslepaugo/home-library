@@ -68,7 +68,7 @@ def download_image(url, folder='images'):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='Script for downloading books from https://tululu.org')
     parser.add_argument('--start_id', help='Start ID for book', type=int, default=1)
     parser.add_argument('--end_id', help='End ID for book', type=int, default=10)
     args = parser.parse_args()
