@@ -10,7 +10,7 @@ from urllib.parse import urljoin, urlsplit
 
 
 def check_for_redirect(response):
-    if response.history and 300:
+    if response.history:
         raise requests.exceptions.HTTPError(f'Redirect from {response.history[0].url} ({response.history[0].status_code}, {response.url})')
 
 
@@ -20,8 +20,8 @@ def parse_book_page(content):
     image_path = soup.find('div', {'id':'content'}).find('img')['src']
     comment_blocks = soup.find('div', {'id':'content'}).find_all(class_='texts')
     comments = [comment_block.find('span').text for comment_block in comment_blocks]
-    genre_block = soup.find('span', class_='d_book').find_all('a')
-    genres = [genre.text for genre in genre_block]
+    genre_blocks = soup.find('span', class_='d_book').find_all('a')
+    genres = [genre.text for genre in genre_blocks]
     return {
         'title': title.strip(),
         'author': author.strip(),
@@ -31,13 +31,13 @@ def parse_book_page(content):
         }
 
 
-def download_txt(url, filename, folder='books'):
+def download_txt(url, book_id, filename, folder='books'):
     outpath = Path.cwd() / folder
     Path.mkdir(outpath, exist_ok=True)
-    response = requests.get(url)
+    response = requests.get(url, params={'id': book_id})
     response.raise_for_status()
     check_for_redirect(response)
-    filepath = outpath / sanitize_filename(filename + '.txt')
+    filepath = outpath / sanitize_filename(f'{filename}.txt')
     with open(filepath, 'wb') as file:
         file.write(response.content)
     return filepath
@@ -68,7 +68,7 @@ if __name__ == '__main__':
             response.raise_for_status()
             check_for_redirect(response)
             book = parse_book_page(response.text)
-            download_txt(f'https://tululu.org/txt.php?id={book_id}', f"{book_id}. {book['title']}", 'books')
+            download_txt(f'https://tululu.org/txt.php', book_id, f"{book_id}. {book['title']}", 'books')
             download_image(urljoin(book_url, book['image_path']), 'images')
         except requests.exceptions.HTTPError as err:
             print(err, file=sys.stderr)
