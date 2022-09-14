@@ -10,7 +10,7 @@ from urllib.parse import urljoin, urlsplit
 
 
 def check_for_redirect(response):
-    if response.history and 300 < response.history[0].status_code < 400:
+    if response.history and 300:
         raise requests.exceptions.HTTPError(f'Redirect from {response.history[0].url} ({response.history[0].status_code}, {response.url})')
 
 
@@ -19,15 +19,9 @@ def parse_book_page(content):
     title, author = soup.find('div', {'id':'content'}).find('h1').text.split('::')
     image_url = soup.find('div', {'id':'content'}).find('img')['src']
     comment_blocks = soup.find('div', {'id':'content'}).find_all(class_='texts')
-    comments = []
-    for comment_block in comment_blocks:
-        comment = comment_block.find('span').text
-        comments.append(comment)
-    genres = []
+    comments = [comment_block.find('span').text for comment_block in comment_blocks]
     genre_block = soup.find('span', class_='d_book').find_all('a')
-    for genre in genre_block:
-        genres.append(genre.text)
-
+    genres = [genre.text for genre in genre_block]
     return {
         'title': title.strip(),
         'author': author.strip(),
