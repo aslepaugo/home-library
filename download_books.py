@@ -36,10 +36,7 @@ def download_txt(url, filename, folder='books'):
     Path.mkdir(outpath, exist_ok=True)
     response = requests.get(url)
     response.raise_for_status()
-    try:
-        check_for_redirect(response)
-    except requests.exceptions.HTTPError:
-        return None
+    check_for_redirect(response)
     filepath = outpath / sanitize_filename(filename + '.txt')
     with open(filepath, 'wb') as file:
         file.write(response.content)
@@ -51,12 +48,8 @@ def download_image(url, folder='images'):
     Path.mkdir(outpath, exist_ok=True)
     response = requests.get(url)
     response.raise_for_status()
-    try:
-        check_for_redirect(response)
-    except requests.exceptions.HTTPError:
-        return None
+    check_for_redirect(response)
     filename = urlsplit(url).path.split('/')[-1]
-
     filepath = outpath / sanitize_filename(filename)
     with open(filepath, 'wb') as file:
         file.write(response.content)
