@@ -17,7 +17,7 @@ def check_for_redirect(response):
 def parse_book_page(content):
     soup = BeautifulSoup(content, 'lxml')
     title, author = soup.find('div', {'id':'content'}).find('h1').text.split('::')
-    image_url = soup.find('div', {'id':'content'}).find('img')['src']
+    image_path = soup.find('div', {'id':'content'}).find('img')['src']
     comment_blocks = soup.find('div', {'id':'content'}).find_all(class_='texts')
     comments = [comment_block.find('span').text for comment_block in comment_blocks]
     genre_block = soup.find('span', class_='d_book').find_all('a')
@@ -25,7 +25,7 @@ def parse_book_page(content):
     return {
         'title': title.strip(),
         'author': author.strip(),
-        'image_url': urljoin('https://tululu.org', image_url),
+        'image_path': image_path,
         'comments': comments,
         'genres': genres,
         }
@@ -70,12 +70,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     for book_id in range(args.start_id, args.end_id + 1):     
         try:
-            response = requests.get(f'https://tululu.org/b{book_id}/')
+            book_url = f'https://tululu.org/b{book_id}/'
+            response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
             book = parse_book_page(response.text)
             download_txt(f'https://tululu.org/txt.php?id={book_id}', f"{book_id}. {book['title']}", 'books')
-            download_image(book['image_url'], 'images')
+            download_image(urljoin(book_url, book['image_path']), 'images')
         except requests.exceptions.HTTPError as err:
             print(err, file=sys.stderr)
             continue        
