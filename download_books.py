@@ -68,7 +68,7 @@ if __name__ == '__main__':
             response.raise_for_status()
             check_for_redirect(response)
             book = parse_book_page(response.text)
-            download_txt(f'https://tululu.org/txt.php', book_id, f"{book_id}. {book['title']}", 'books')
+            download_txt('https://tululu.org/txt.php', book_id, f"{book_id}. {book['title']}", 'books')
             download_image(urljoin(book_url, book['image_path']), 'images')
         except requests.exceptions.HTTPError as err:
             print(err, file=sys.stderr)
