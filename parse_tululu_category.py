@@ -10,6 +10,8 @@ response = requests.get(scince_fiction_url)
 response.raise_for_status()
 content = response.text
 soup = BeautifulSoup(content, 'lxml')
-book_link = soup.find('div', {'id':'content'}).find('table').find('a')['href']
-url = urljoin(base_url, book_link)
-print(url)
+book_cards = soup.find('div', {'id':'content'}).find_all('table')
+for book_card in book_cards:
+    book_link = book_card.find('a')['href']
+    url = urljoin(base_url, book_link)
+    print(url)
