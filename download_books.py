@@ -16,13 +16,11 @@ def check_for_redirect(response):
 
 def parse_book_page(content):
     soup = BeautifulSoup(content, 'lxml')
-    title, author = soup.find('div', {'id':'content'}).find('h1').text.split('::')
-    image_path = soup.find('div', {'id':'content'}).find('img')['src']
-    comment_blocks = soup.find('div', {'id':'content'}).find_all(class_='texts')
-    comments = [comment_block.find('span').text for comment_block in comment_blocks]
-    genre_blocks = soup.find('span', class_='d_book').find_all('a')
-    genres = [genre.text for genre in genre_blocks]
-    txt_link_tag = soup.find('a', href=True, text='скачать txt')
+    title, author = soup.select_one('#content h1').text.split('::')
+    image_path = soup.select_one('#content img')['src']
+    comments = [comment.text for comment in soup.select('.texts span.black')]
+    genres = [genre.text for genre in soup.select('.d_book a')]
+    txt_link_tag = soup.select_one("table.d_book a[title*='скачать книгу txt']")
     if txt_link_tag:
         txt_link = txt_link_tag['href']
     else:
