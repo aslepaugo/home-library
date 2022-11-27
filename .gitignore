@@ -131,3 +131,4 @@ dmypy.json
 books/
 images/
 .flake8
+books.json

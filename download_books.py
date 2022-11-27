@@ -22,12 +22,18 @@ def parse_book_page(content):
     comments = [comment_block.find('span').text for comment_block in comment_blocks]
     genre_blocks = soup.find('span', class_='d_book').find_all('a')
     genres = [genre.text for genre in genre_blocks]
+    txt_link_tag = soup.find('a', href=True, text='скачать txt')
+    if txt_link_tag:
+        txt_link = txt_link_tag['href']
+    else:
+        txt_link = None
     return {
         'title': title.strip(),
         'author': author.strip(),
         'image_path': image_path,
         'comments': comments,
         'genres': genres,
+        'txt_link': txt_link,
         }
 
 
