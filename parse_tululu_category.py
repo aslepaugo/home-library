@@ -20,6 +20,14 @@ if __name__ == '__main__':
                         help="Identify from which page you would like to start.")
     parser.add_argument("--end_page", type=int,
                         help="Identify on which page you would like to end. (end page won't be parsed)")
+    parser.add_argument("--dest_folder", type=str, default="books",
+                        help="Folder to save books. (default: books)")
+    parser.add_argument("--skip_imgs", action="store_true",
+                        help="Do not download images.")
+    parser.add_argument("--skip_txt", action="store_true",
+                        help="Do not download books.")
+    parser.add_argument("--json_path", type=str, default="books.json",
+                        help="Path to json-file with book descriptions. (default: books.json)")
     args = parser.parse_args()
     start_page = args.start_page
     end_page = args.end_page
@@ -48,8 +56,15 @@ if __name__ == '__main__':
                     print(f'There is no TXT book for the link {book_url}')
                     continue
                 books.append(book)
-                download_books.download_txt('https://tululu.org/txt.php', book_id, f"{book_id}. {book['title']}", 'books')
-                download_books.download_image(urljoin(book_url, book['image_path']), 'images')
+                if not args.skip_txt:
+                    download_books.download_txt(
+                        'https://tululu.org/txt.php', 
+                        book_id, 
+                        f"{book_id}. {book['title']}", 
+                        args.dest_folder
+                    )
+                if not args.skip_imgs:
+                    download_books.download_image(urljoin(book_url, book['image_path']), 'images')
             except requests.exceptions.HTTPError as err:
                 print(err, file=sys.stderr)
                 continue        
@@ -59,5 +74,5 @@ if __name__ == '__main__':
                 continue
 
 
-    with open("books.json", "w", encoding="utf8") as file:
+    with open(args.json_path, "w", encoding="utf8") as file:
         json.dump(books, file, ensure_ascii=False)
