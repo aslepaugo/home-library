@@ -19,15 +19,15 @@ if __name__ == '__main__':
     parser.add_argument("--start_page", type=int, default=1,
                         help="Identify from which page you would like to start.")
     parser.add_argument("--end_page", type=int,
-                        help="Identify on which page you would like to end. (end page won't be parsed)")
+                        help="Identify on which page you would like to end (end page won't be parsed).")
     parser.add_argument("--dest_folder", type=str, default="books",
-                        help="Folder to save books. (default: books)")
+                        help="Folder to save books (default: books).")
     parser.add_argument("--skip_imgs", action="store_true",
                         help="Do not download images.")
     parser.add_argument("--skip_txt", action="store_true",
                         help="Do not download books.")
     parser.add_argument("--json_path", type=str, default="books.json",
-                        help="Path to json-file with book descriptions. (default: books.json)")
+                        help="Path to json-file with book descriptions (default: books.json).")
     args = parser.parse_args()
     start_page = args.start_page
     end_page = args.end_page
