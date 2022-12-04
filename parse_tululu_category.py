@@ -44,12 +44,20 @@ def get_end_page(url, end_page=None):
 def get_book_links(url, start_page, end_page):
     book_links = []
     for page in range(start_page, end_page):
-        response = requests.get(f"{url}/{page}")
-        response.raise_for_status()
-        download_books.check_for_redirect(response)
-        content = response.text
-        soup = BeautifulSoup(content, 'lxml')
-        book_links += [book_link_tag['href'] for book_link_tag in soup.select('.bookimage a')]
+        try:
+            response = requests.get(f"{url}/{page}")
+            response.raise_for_status()
+            download_books.check_for_redirect(response)
+            content = response.text
+            soup = BeautifulSoup(content, 'lxml')
+            book_links += [book_link_tag['href'] for book_link_tag in soup.select('.bookimage a')]
+        except requests.exceptions.HTTPError as err:
+            print(err, file=sys.stderr)
+            continue        
+        except requests.exceptions.ConnectionError as err:
+            print(err, file=sys.stderr)
+            time.sleep(5)
+            continue       
     return book_links
 
 
