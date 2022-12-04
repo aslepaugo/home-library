@@ -33,7 +33,6 @@ def create_parser():
 def get_end_page(url, end_page=None):
     response = requests.get(url)
     response.raise_for_status()
-    download_books.check_for_redirect(response)
     soup = BeautifulSoup(response.text, 'lxml')
     max_page = int(soup.select_one("p.center > :last-child").text)
     if not end_page or end_page <= start_page or end_page > max_page + 1:
