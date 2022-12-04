@@ -33,6 +33,7 @@ def create_parser():
 def get_end_page(url, end_page=None):
     response = requests.get(url)
     response.raise_for_status()
+    download_books.check_for_redirect(response)
     soup = BeautifulSoup(response.text, 'lxml')
     max_page = int(soup.select_one("p.center > :last-child").text)
     if not end_page or end_page <= start_page or end_page > max_page + 1:
@@ -45,6 +46,7 @@ def get_book_links(url, start_page, end_page):
     for page in range(start_page, end_page):
         response = requests.get(f"{url}/{page}")
         response.raise_for_status()
+        download_books.check_for_redirect(response)
         content = response.text
         soup = BeautifulSoup(content, 'lxml')
         book_links += [book_link_tag['href'] for book_link_tag in soup.select('.bookimage a')]
@@ -58,9 +60,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     start_page = args.start_page
     end_page = get_end_page(url=scince_fiction_url, end_page=args.end_page)
-    books = []
-
     book_links = get_book_links(url=scince_fiction_url, start_page=start_page, end_page=end_page)
+    books = []
     for book_link in book_links:
         book_url = urljoin(base_url, book_link)
         book_id = re.findall(r'\d+', book_link)[0]
@@ -89,7 +90,6 @@ if __name__ == '__main__':
             print(err, file=sys.stderr)
             time.sleep(5)
             continue
-
 
     with open(args.json_path, "w", encoding="utf8") as file:
         json.dump(books, file, ensure_ascii=False)
