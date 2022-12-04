@@ -15,7 +15,9 @@ if __name__ == '__main__':
     base_url = "https://tululu.org"
     scince_fiction_url = "https://tululu.org/l55"
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description = "Script to download books from https://tululu.org by predefined category (SciFi by default)."
+    )
     parser.add_argument("--start_page", type=int, default=1,
                         help="Identify from which page you would like to start.")
     parser.add_argument("--end_page", type=int,
