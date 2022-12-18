@@ -19,7 +19,7 @@ def parse_book_page(content):
     title, author = soup.select_one('#content h1').text.split('::')
     image_path = soup.select_one('#content img')['src']
     comments = [comment.text for comment in soup.select('.texts span.black')]
-    genres = [genre.text for genre in soup.select('.d_book a')]
+    genres = [genre.text for genre in soup.select('span.d_book a')]
     txt_link_tag = soup.select_one("table.d_book a[title*='скачать книгу txt']")
     if txt_link_tag:
         txt_link = txt_link_tag['href']
