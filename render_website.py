@@ -17,11 +17,14 @@ def on_reload():
         autoescape=select_autoescape(["html"])
     )
     template = env.get_template("template.html")
-    for page, books_chunk in enumerate(list(chunked(books, BOOKS_ON_PAGE))):
+    chunked_books = list(chunked(books, 10))
+    for page, books_chunk in enumerate(chunked_books, start=1):
         rendered_page = template.render(
-            books=list(chunked(books_chunk, COLUMN_COUNT))
+            books=list(chunked(books_chunk, COLUMN_COUNT)),
+            current_page=page,
+            total_page=len(chunked_books),
         )
-        with open(f"pages/index{page + 1}.html", "w", encoding="utf8") as file:
+        with open(f"pages/index{page}.html", "w", encoding="utf8") as file:
             file.write(rendered_page)    
 
 
