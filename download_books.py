@@ -44,7 +44,7 @@ def download_txt(url, book_id, filename, folder='books'):
     filepath = outpath / sanitize_filename(f'{filename}.txt')
     with open(filepath, 'wb') as file:
         file.write(response.content)
-    return filepath
+    return f"{folder}/{sanitize_filename(f'{filename}.txt')}"
 
 
 def download_image(url, folder='images'):

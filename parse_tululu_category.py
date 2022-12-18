@@ -82,7 +82,7 @@ if __name__ == '__main__':
                 continue
             books.append(book)
             if not args.skip_txt:
-                download_books.download_txt(
+                book['txt_link'] = download_books.download_txt(
                     'https://tululu.org/txt.php', 
                     book_id, 
                     f"{book_id}. {book['title']}", 
