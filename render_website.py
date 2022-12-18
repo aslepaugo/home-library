@@ -6,18 +6,20 @@ from livereload import Server
 from more_itertools import chunked
 
 
+BOOKS_ON_PAGE = 10
+COLUMN_COUNT = 2
+
 def on_reload():
     with open("books.json", "r", encoding='utf-8') as file:
-        books_data = file.read()
-    books = json.loads(books_data)
+        books = json.load(file)
     env = Environment(
         loader=FileSystemLoader("."),
         autoescape=select_autoescape(["html"])
     )
     template = env.get_template("template.html")
-    for page, books_chunk in enumerate(list(chunked(books, 10))):
+    for page, books_chunk in enumerate(list(chunked(books, BOOKS_ON_PAGE))):
         rendered_page = template.render(
-            books=list(chunked(books_chunk, 2))
+            books=list(chunked(books_chunk, COLUMN_COUNT))
         )
         with open(f"pages/index{page + 1}.html", "w", encoding="utf8") as file:
             file.write(rendered_page)    
