@@ -57,7 +57,7 @@ def download_image(url, folder='images'):
     filepath = outpath / sanitize_filename(filename)
     with open(filepath, 'wb') as file:
         file.write(response.content)
-    return filepath
+    return f"{folder}/{sanitize_filename(filename)}"
 
 
 if __name__ == '__main__':

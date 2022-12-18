@@ -89,7 +89,7 @@ if __name__ == '__main__':
                     args.dest_folder
                 )
             if not args.skip_imgs:
-                download_books.download_image(urljoin(book_url, book['image_path']), 'images')
+                book['image_path'] = download_books.download_image(urljoin(book_url, book['image_path']), 'images')
         except requests.exceptions.HTTPError as err:
             print(err, file=sys.stderr)
             continue        
