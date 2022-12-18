@@ -128,8 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-books/
-images/
 .flake8
-books.json
-pages/
