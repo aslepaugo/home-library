@@ -74,3 +74,19 @@ python parse_tululu_category.py --start_page 10 --skip_imgs
 ```bash
 python parse_tululu_category.py --json_path "/home/user_name/my_books.json" --dest_folder "/home/user_name/books_folder"
 ```
+
+## Library start and usage
+
+After all preparations are done, you are ready to go withh offline library.
+
+Run script `render_website.py`
+
+```bash
+python render_website.py
+```
+
+Open URL for offline library usage - [Home Library](http://127.0.0.1:5500/pages/index1.html)
+
+Example of the prepared library is available on [GitHub pages](https://aslepaugo.github.io/home-library/pages/index1.html)
+
+
