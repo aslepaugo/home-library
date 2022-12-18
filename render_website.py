@@ -1,4 +1,5 @@
 import json
+import os
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
@@ -14,14 +15,16 @@ def on_reload():
         autoescape=select_autoescape(["html"])
     )
     template = env.get_template("template.html")
-    rendered_page = template.render(
-        books=list(chunked(books, 2))
-    )
-    with open("index.html", "w", encoding="utf8") as file:
-        file.write(rendered_page)    
+    for page, books_chunk in enumerate(list(chunked(books, 10))):
+        rendered_page = template.render(
+            books=list(chunked(books_chunk, 2))
+        )
+        with open(f"pages/index{page + 1}.html", "w", encoding="utf8") as file:
+            file.write(rendered_page)    
 
 
 if __name__ == "__main__":
+    os.makedirs("pages", exist_ok=True)
     on_reload()
     server = Server()
     server.watch("template.html", on_reload)
