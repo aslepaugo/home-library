@@ -88,5 +88,3 @@ python render_website.py
 Open URL for offline library usage - [Home Library](http://127.0.0.1:5500/pages/index1.html)
 
 Example of the prepared library is available on [GitHub pages](https://aslepaugo.github.io/home-library/pages/index1.html)
-
-
