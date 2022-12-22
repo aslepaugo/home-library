@@ -17,7 +17,7 @@ def on_reload():
         autoescape=select_autoescape(["html"])
     )
     template = env.get_template("template.html")
-    chunked_books = list(chunked(books, 10))
+    chunked_books = list(chunked(books, BOOKS_ON_PAGE))
     for page, books_chunk in enumerate(chunked_books, start=1):
         rendered_page = template.render(
             books=list(chunked(books_chunk, COLUMN_COUNT)),
