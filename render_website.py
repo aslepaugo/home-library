@@ -22,7 +22,7 @@ def on_reload():
         rendered_page = template.render(
             books=list(chunked(books_chunk, COLUMN_COUNT)),
             current_page=page,
-            total_page=len(chunked_books),
+            total_pages=len(chunked_books),
         )
         with open(f"pages/index{page}.html", "w", encoding="utf8") as file:
             file.write(rendered_page)    

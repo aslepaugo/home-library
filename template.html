@@ -16,12 +16,12 @@
         <li class="page-item {% if current_page==1 %} disabled{% endif %}">
           <a class="page-link" href="../pages/index{{ current_page - 1 }}.html">Назад</a>
         </li>
-        {% for page_num in range(1, total_page + 1) %}
+        {% for page_num in range(1, total_pages + 1) %}
           <li class="page-item {% if page_num==current_page %} active{% endif %}">
             <a class="page-link" href="../pages/index{{ page_num }}.html">{{ page_num }}</a>
           </li>
         {% endfor %}
-        <li class="page-item {% if current_page==total_page %} disabled{% endif %}">
+        <li class="page-item {% if current_page==total_pages %} disabled{% endif %}">
           <a class="page-link" href="../pages/index{{ current_page + 1 }}.html">Вперед</a>
         </li>
       </ul>
